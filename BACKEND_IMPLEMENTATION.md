@@ -87,3 +87,32 @@ Add folders path that don't need in git.
 
 - `middleware/asyncHandler.middleware.ts` to centeralized the **try/catch** for all controller as asyncHandler act as wrapper for all the controller and pass the error to next(error)
 - `middleware/errorHandler.middleware.ts` catches all the error passed by **next(error)** and return the error specific to the conditions: 404, 500 and so on with the help of, `utils/app-error.ts`, AppError Class to call custom Exceptions.
+
+## Setting up Database with Prisma Postgres using Neon
+
+### Step 1: Install required packages
+
+`pnpm add prisma @types/pg --save-dev
+pnpm add @prisma/client @prisma/adapter-pg pg dotenv`
+
+#### Note: Details guide in [Prisma Docs](https://www.prisma.io/docs/prisma-orm/quickstart/prisma-postgres)
+
+1. Initalized the Prisma ORM CLI
+
+`pnpm dlx prisma` || `npx prisma`
+
+2. Create Prisma ORM project by creating your Prisma Schema file with the following command
+
+`pnpm dlx prisma init --output ../generated/prisma` || `npx prisma init --output ../generated/prisma`
+
+- Creates a `prisma/` directory with a `schema.prisma` file containing your database connection and schema models
+- Creates a .env file in the root directory for environment variables
+- Creates a `prisma.config.ts` file for Prisma configuration
+
+**_Note: You can change the generated output file path from `prisma/schema.prisma`_**
+
+3. Create singleton Prisma Instance in `lib/prisma.ts`
+4. Create `config/database.config.ts` file to connect to DB.
+5. Create DB models/ table in `prisma/schema.prisma` file
+   - npx prisma migrate dev --name model-created-for-user-chat-message // created migration sql file and table in db
+   - npx prisma generate // generate the Type or ORM file in specified output path and prisma client needed for `lib/prisma.ts`

@@ -27,3 +27,4 @@ coverage/
 
 # OS files
 .DS_Store
+/generated/prisma

@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  // Primary key. UUID keeps IDs unique across distributed systems.
+  id        String   @id @default(uuid())
+  // Display name shown in chat UI.
+  name      String
+  // Login identity; unique prevents duplicate accounts.
+  email     String   @unique
+  // Hashed password (never store plain text).
+  password  String
+  // Optional profile image.
+  avatar    String?
+  // Audit timestamps.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Many-to-many: user can participate in many chats.
+  chats        Chat[]    @relation("ChatParticipants")
+  // One-to-many: user can create many group/direct chats.
+  createdChats Chat[]    @relation("ChatCreatedBy")
+  // One-to-many: user can send many messages.
+  messages     Message[] @relation("MessageSender")
+
+  @@index([email])
+  @@map("users")
+}
+
+model Chat {
+  // Primary key for each conversation.
+  id          String   @id @default(uuid())
+  // Distinguishes direct chat vs group chat.
+  isGroup     Boolean  @default(false)
+  // Group-only metadata.
+  groupName   String?
+  groupAvatar String?
+  // Audit timestamps.
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Many-to-many participants in this chat.
+  participants User[] @relation("ChatParticipants")
+
+  // Foreign key to User who created this chat.
+  createdById String
+  // Creator relation using createdById FK.
+  createdBy   User   @relation("ChatCreatedBy", fields: [createdById], references: [id])
+
+  // Points to current/latest message for chat list previews.
+  latestMessageId String?
+  // Optional latest message relation (SetNull if that message is deleted).
+  latestMessage   Message? @relation("ChatLastMessage", fields: [latestMessageId], references: [id], onDelete: SetNull)
+
+  // One-to-many: a chat contains many messages.
+  messages Message[] @relation("ChatMessages")
+
+  // Indexes for faster filtering/joins.
+  @@index([createdById])
+  @@index([latestMessageId])
+  @@map("chats")
+}
+
+model Message {
+  // Primary key for each message.
+  id        String   @id @default(uuid())
+  // Text and media payload (at least one can be present by app logic).
+  content   String?
+  image     String?
+  // Audit timestamps.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // FKs for sender and chat ownership.
+  senderId String
+  // Message belongs to one sender.
+  sender   User   @relation("MessageSender", fields: [senderId], references: [id])
+
+  chatId String
+  // Message belongs to one chat.
+  chat   Chat   @relation("ChatMessages", fields: [chatId], references: [id])
+
+  // Self-reference for threaded "reply to message".
+  replyToId String?
+  // Self relation pair for replies.
+  replyTo   Message?  @relation("MessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   Message[] @relation("MessageReply")
+
+  // Back relation for Chat.latestMessage.
+  // indicating if i am the last message for a chat just for the ORM help but not stored in the database
+  lastMessageForChat Chat[] @relation("ChatLastMessage")
+
+  // Indexes for timeline queries and reply lookups.
+  @@index([senderId])
+  @@index([chatId])
+  @@index([replyToId])
+  @@map("messages")
+}
