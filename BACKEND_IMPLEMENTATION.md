@@ -1,0 +1,89 @@
+# AI Chat App Backend
+
+This document explains the initial backend setup steps and core package decisions for the AI Chat App.
+
+## Step 1: Initialize the project
+
+Run:
+
+`npm init -y`
+
+This creates `package.json`, which tracks scripts, dependencies, and project metadata.
+
+## Step 2: Install runtime libraries
+
+Install backend runtime packages:
+
+`pnpm add bcryptjs cloudinary cors cookie-parser dotenv express helmet jsonwebtoken passport passport-jwt socket.io zod`
+
+### Note
+
+- Use `pnpm add <package>` to add a new package.
+- Use `pnpm install` to install packages already listed in `package.json` (commonly after cloning the project).
+
+## Step 3: Install type packages and dev tools
+
+Install type packages:
+
+`pnpm add @types/bcryptjs @types/cookie-parser @types/cors @types/dotenv @types/express @types/jsonwebtoken @types/node @types/passport @types/passport-jwt`
+
+Install development-only tools:
+
+`pnpm add -D nodemon ts-node typescript`
+
+### Note
+
+`dotenv` and `bcryptjs` already include built-in TypeScript types.  
+`@types/dotenv` and `@types/bcryptjs` are optional and usually unnecessary.
+
+## Step 4: Create TypeScript config
+
+Initialize TypeScript config:
+
+`npx tsc --init`
+
+Or create `tsconfig.json` manually and use:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src", "src/@types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "test"]
+}
+```
+
+## Step 5: Create `nodemon.json` file
+
+```json
+{
+  "watch": ["src"],
+  "ext": "ts",
+  "exec": "ts-node ./src/index.ts"
+}
+```
+
+## Step 6: Set `.env` and `.gitignore` file
+
+Add the Node_env, db, and jwt_secret, frontend_origin and other sensitive api keys and url in .env
+
+Add folders path that don't need in git.
+
+## Step 7: Create utils and config files
+
+- `utils/get-env.ts` file to get `.env` values
+- `utils/app-error.ts` to get the formated error class based on params: HTTPSTATUS, ErrorCode, and custom message, such as InternalServerException, NotFoundException, BadRequestException, and so on.
+- `config/evn.config.ts` file to ask the value from `utls/get-env.ts`
+- `config/https.config.ts` file to get the HTTPSTATUS and its Types, refer to the exact file to get the full explaination
+
+## Step 8: Create middleware
+
+- `middleware/asyncHandler.middleware.ts` to centeralized the **try/catch** for all controller as asyncHandler act as wrapper for all the controller and pass the error to next(error)
+- `middleware/errorHandler.middleware.ts` catches all the error passed by **next(error)** and return the error specific to the conditions: 404, 500 and so on with the help of, `utils/app-error.ts`, AppError Class to call custom Exceptions.

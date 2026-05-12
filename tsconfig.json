@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2021", // for ES2021 syntax
+    "module": "commonjs", // for commonjs modules
+    "rootDir": "src", // for root directory
+    "outDir": "dist", // for output directory
+    "strict": true, // for strict mode
+    "esModuleInterop": true, // for enabling compatibility with ES modules
+    "skipLibCheck": true, // for skipping library checks
+    "types": ["node"] // for node types such as process.env, it is a built-in type
+  },
+  "include": ["src", "src/@types/**/*.d.ts"], // for types such as process.env
+  "exclude": ["node_modules", "dist", "test"] // for excluding node_modules, dist, and test folders
+}
