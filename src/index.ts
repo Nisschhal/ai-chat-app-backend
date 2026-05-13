@@ -2,12 +2,15 @@ import "dotenv/config"
 import express from "express"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import passport from "passport"
 
 import { ENV } from "./config/env.config"
 import { errorHandler } from "./middlewares/errorHandler.middleware"
 import { asyncHandler } from "./middlewares/asyncHandler.middleware"
 import { HTTPSTATUS } from "./config/http.config"
 import { connectDatabase } from "./config/database.config"
+import router from "./routes"
+import "./config/passport.config"
 
 const app = express()
 
@@ -21,6 +24,8 @@ app.use(
   }),
 )
 
+app.use(passport.initialize())
+
 app.get(
   "/health",
   asyncHandler(async (req, res) => {
@@ -29,6 +34,8 @@ app.get(
     })
   }),
 )
+
+app.use("/api", router)
 
 app.use((req, res) => {
   return res.status(HTTPSTATUS.NOT_FOUND).json({
