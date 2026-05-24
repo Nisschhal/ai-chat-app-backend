@@ -1,4 +1,8 @@
-import { NotFoundException, UnauthorizedException } from "@/config/app-error"
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from "@/config/app-error"
 import prisma from "@/lib/prisma"
 import {
   LoginSchemaType,
@@ -16,7 +20,7 @@ export const registerService = async (body: RegisterSchemaType) => {
   })
 
   if (existingUser) {
-    throw new UnauthorizedException("User already exists")
+    throw new BadRequestException("User already exists")
   }
 
   const hashedPassword = await hashValue(password)

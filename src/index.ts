@@ -2,6 +2,7 @@ import "dotenv/config"
 import express from "express"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import http from "http"
 import passport from "passport"
 
 import { ENV } from "./config/env.config"
@@ -11,10 +12,16 @@ import { HTTPSTATUS } from "./config/http.config"
 import { connectDatabase } from "./config/database.config"
 import router from "./routes"
 import "./config/passport.config"
+import { initializeSocket } from "./lib/socket"
 
 const app = express()
+// create a server using http module for socket.io
+const server = http.createServer(app)
 
-app.use(express.json())
+// create a socket.io instance
+initializeSocket(server)
+
+app.use(express.json({ limit: "10mb" }))
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(
@@ -58,7 +65,7 @@ async function startServer() {
     process.exit(1)
   }
 
-  app.listen(Number(ENV.PORT), () => {
+  server.listen(Number(ENV.PORT), () => {
     console.log(`Server running on port ${ENV.PORT} in ${ENV.NODE_ENV} mode`)
     console.log(`CORS allowed origins: ${ENV.FRONTEND_ORIGIN}`)
   })

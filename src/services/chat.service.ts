@@ -1,5 +1,6 @@
 import { BadRequestException, NotFoundException } from "@/config/app-error"
 import prisma from "@/lib/prisma"
+import { emitNewChatToParticipants } from "@/lib/socket"
 
 export const createChatService = async (
   userId: string,
@@ -15,7 +16,7 @@ export const createChatService = async (
   let chat
   let allParticipants: string[] = []
 
-  // Create a group chat
+  // Create a group chat if isGroup is true and participants and groupName are provided
   if (isGroup && participants?.length && groupName) {
     allParticipants = [...participants, userId]
     chat = await prisma.chat.create({
@@ -58,7 +59,7 @@ export const createChatService = async (
       },
     })
   }
-  // Create a direct chat
+  // Create a direct chat if participantId is provided
   else if (participantId) {
     const otherUser = await prisma.user.findUnique({
       where: {
@@ -69,7 +70,7 @@ export const createChatService = async (
       throw new NotFoundException("User not found")
     }
     allParticipants = [userId, participantId]
-    // Check if the chat already exists
+    // Check if the chat already exists using the participants array
     const existingChat = await prisma.chat.findFirst({
       where: {
         isGroup: false,
@@ -128,10 +129,10 @@ export const createChatService = async (
         messages: true,
       },
     })
-    // If the chat already exists, return the existing chat
+    // If the chat already exists, return the existing chat using the participants array
     if (existingChat) return existingChat
 
-    // If the chat does not exist, create a new chat
+    // If the chat does not exist, create a new chat using the participants array
     chat = await prisma.chat.create({
       data: {
         isGroup: false,
@@ -173,7 +174,10 @@ export const createChatService = async (
     throw new BadRequestException("Invalid chat type or parameters")
   }
 
-  // TODO: Websocket notification to the other participant
+  // Emit the new chat to all participants
+  // Notify all participants about the newly created chat
+  const participantsIds = Array.from(new Set(allParticipants))
+  emitNewChatToParticipants(participantsIds, chat)
 
   return chat
 }
@@ -302,4 +306,26 @@ export const getSingleChatService = async (chatId: string, userId: string) => {
     chat,
     messages,
   }
+}
+
+export const validateChatParticipantsService = async (
+  chatId: string,
+  userId: string,
+) => {
+  const chat = await prisma.chat.findFirst({
+    where: {
+      id: chatId,
+      participants: {
+        some: {
+          id: userId,
+        },
+      },
+    },
+  })
+  if (!chat) {
+    throw new BadRequestException(
+      "Chat not found for socket connection or you are not authorized to view this chat",
+    )
+  }
+  return chat
 }

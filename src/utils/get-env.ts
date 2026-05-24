@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 export const getEnv = (key: string, defaultValue: string = "") => {
   // if the value is not found, return the default value
   const value = process.env[key] ?? defaultValue
