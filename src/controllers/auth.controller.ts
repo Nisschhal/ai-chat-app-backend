@@ -4,6 +4,7 @@ import { loginSchema, registerSchema } from "@/validators/auth.validators"
 import { loginService, registerService } from "@/services/auth.service"
 import { clearJwtAuthCookie, setJwtAuthCookie } from "@/utils/cookie"
 import { HTTPSTATUS } from "@/config/http.config"
+import { emitNewUserToAll } from "@/lib/socket"
 
 export const registerController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -12,6 +13,7 @@ export const registerController = asyncHandler(
     const newUser = await registerService(body)
 
     const userId = newUser.id
+    emitNewUserToAll(newUser)
 
     return setJwtAuthCookie({ res, userId }).status(HTTPSTATUS.CREATED).json({
       message: "User created and logged in successfully",

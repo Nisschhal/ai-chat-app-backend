@@ -19,6 +19,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "src/@types/**/*.d.ts"], // for types such as process.env
+  "include": ["src", "src/@types/**/*.d.ts", "../client/src/lib/helper.ts"], // for types such as process.env
   "exclude": ["node_modules", "dist", "test"] // for excluding node_modules, dist, and test folders
 }

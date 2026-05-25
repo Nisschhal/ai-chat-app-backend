@@ -130,6 +130,11 @@ export const emitNewChatToParticipants = (
   }
 }
 
+export const emitNewUserToAll = (user: any) => {
+  const io = getIo()
+  io.emit("user:new", user)
+}
+
 export const emitNewMessageToChatRoom = (
   senderId: string,
   chatId: string,
