@@ -8,7 +8,6 @@ import {
   LoginSchemaType,
   RegisterSchemaType,
 } from "@/validators/auth.validators"
-import bcrypt from "bcryptjs"
 import { compareValue, hashValue } from "@/utils/bcrypt"
 
 export const registerService = async (body: RegisterSchemaType) => {
@@ -55,6 +54,10 @@ export const loginService = async (body: LoginSchemaType) => {
 
   if (!user) {
     throw new NotFoundException("User not found")
+  }
+
+  if (!user.password) {
+    throw new UnauthorizedException("Invalid email or password")
   }
 
   const isPasswordValid = await compareValue(password, user.password)

@@ -78,6 +78,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   avatar: 'avatar',
+  isAI: 'isAI',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -92,6 +93,7 @@ export const ChatScalarFieldEnum = {
   groupAvatar: 'groupAvatar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  isAIChat: 'isAIChat',
   createdById: 'createdById',
   latestMessageId: 'latestMessageId'
 } as const

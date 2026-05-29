@@ -69,10 +69,14 @@ import { Request, Response } from "express"
 export const createChatController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?.id
+    console.log(req.body, "req.body create chat controller")
 
     const body = createChatSchema.parse(req.body)
 
-    const chat = await createChatService(userId as string, body)
+    const chat = await createChatService(userId as string, {
+      ...body,
+      includeAI: body.includeAI ?? false,
+    })
 
     return res.status(HTTPSTATUS.CREATED).json({
       message: "Chat created or retrieved successfully",

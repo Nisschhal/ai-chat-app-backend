@@ -10,18 +10,40 @@ export const createChatService = async (
     participants?: string[]
     groupName?: string
     groupAvatar?: string
+    includeAI?: boolean
   },
 ) => {
-  const { participantId, isGroup, participants, groupName, groupAvatar } = body
+  const {
+    participantId,
+    isGroup,
+    participants,
+    groupName,
+    groupAvatar,
+    includeAI,
+  } = body
   let chat
   let allParticipants: string[] = []
 
   // Create a group chat if isGroup is true and participants and groupName are provided
   if (isGroup && participants?.length && groupName) {
     allParticipants = [...participants, userId]
+    if (includeAI) {
+      const aiUser = await prisma.user.findFirst({
+        where: {
+          isAI: true,
+        },
+      })
+      if (!aiUser) {
+        throw new NotFoundException("AI user not found")
+      }
+      allParticipants.push(aiUser.id)
+    }
+    allParticipants = Array.from(new Set(allParticipants))
+
     chat = await prisma.chat.create({
       data: {
         isGroup,
+        isAIChat: includeAI === true,
         groupName,
         groupAvatar,
         participants: {
@@ -35,6 +57,7 @@ export const createChatService = async (
             id: true,
             name: true,
             avatar: true,
+            isAI: true,
           },
         },
         createdBy: {
@@ -51,6 +74,108 @@ export const createChatService = async (
                 id: true,
                 name: true,
                 avatar: true,
+                isAI: true,
+              },
+            },
+          },
+        },
+        messages: true,
+      },
+    })
+  }
+  // Create an user to  AI user chat if includeAI is true
+  else if (includeAI && !isGroup && !participantId) {
+    const aiUser = await prisma.user.findFirst({
+      where: {
+        isAI: true,
+      },
+    })
+    if (!aiUser) {
+      throw new NotFoundException("AI user not found")
+    }
+    allParticipants = [userId, aiUser.id]
+    const existingChat = await prisma.chat.findFirst({
+      where: {
+        isGroup: false,
+        isAIChat: true,
+        AND: [
+          { participants: { some: { id: userId } } },
+          { participants: { some: { id: aiUser.id } } },
+          {
+            participants: {
+              every: {
+                id: { in: allParticipants },
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        participants: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            isAI: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        latestMessage: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+                isAI: true,
+              },
+            },
+          },
+        },
+        messages: true,
+      },
+    })
+    if (existingChat) return existingChat
+
+    chat = await prisma.chat.create({
+      data: {
+        isGroup: false,
+        isAIChat: true,
+        participants: {
+          connect: allParticipants.map((id) => ({ id })),
+        },
+        createdById: userId,
+      },
+      include: {
+        participants: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            isAI: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        latestMessage: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+                isAI: true,
               },
             },
           },
@@ -69,6 +194,12 @@ export const createChatService = async (
     if (!otherUser) {
       throw new NotFoundException("User not found")
     }
+    const isAIChat = otherUser.isAI
+
+    if (isAIChat) {
+      throw new BadRequestException("Select AI User to chat with AI ")
+    }
+
     allParticipants = [userId, participantId]
     // Check if the chat already exists using the participants array
     const existingChat = await prisma.chat.findFirst({
@@ -136,6 +267,7 @@ export const createChatService = async (
     chat = await prisma.chat.create({
       data: {
         isGroup: false,
+        isAIChat: false,
         participants: {
           connect: allParticipants.map((id) => ({ id })),
         },
@@ -201,6 +333,7 @@ export const getUserChatsService = async (userId: string) => {
           id: true,
           name: true,
           avatar: true,
+          isAI: true,
         },
       },
       createdBy: {
@@ -217,6 +350,7 @@ export const getUserChatsService = async (userId: string) => {
               id: true,
               name: true,
               avatar: true,
+              isAI: true,
             },
           },
         },
@@ -242,6 +376,7 @@ export const getSingleChatService = async (chatId: string, userId: string) => {
           id: true,
           name: true,
           avatar: true,
+          isAI: true,
         },
       },
       createdBy: {
@@ -258,6 +393,7 @@ export const getSingleChatService = async (chatId: string, userId: string) => {
               id: true,
               name: true,
               avatar: true,
+              isAI: true,
             },
           },
         },
@@ -280,6 +416,7 @@ export const getSingleChatService = async (chatId: string, userId: string) => {
           id: true,
           name: true,
           avatar: true,
+          isAI: true,
         },
       },
       replyTo: {
@@ -292,6 +429,7 @@ export const getSingleChatService = async (chatId: string, userId: string) => {
               id: true,
               name: true,
               avatar: true,
+              isAI: true,
             },
           },
         },

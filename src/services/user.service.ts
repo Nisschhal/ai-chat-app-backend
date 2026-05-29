@@ -41,6 +41,7 @@ export const getUsersService = async (userId: string) => {
       avatar: true,
       createdAt: true,
       updatedAt: true,
+      isAI: true,
     },
     orderBy: {
       createdAt: "desc",

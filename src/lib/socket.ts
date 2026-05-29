@@ -175,3 +175,39 @@ export const emitLastMessageToChatParticipants = (
     io.to(`user:${participantId}`).emit("chat:update", payload)
   }
 }
+
+export const emitChatAI = ({
+  chatId,
+  chunk,
+  sender,
+  done,
+  message,
+}: {
+  chatId: string
+  chunk?: string | null
+  sender?: any
+  done?: boolean
+  message?: any
+}) => {
+  const io = getIo()
+  if (chunk?.trim() && !done) {
+    io.to(`chat:${chatId}`).emit("chat:ai", {
+      chatId,
+      chunk,
+      sender,
+      done,
+      message,
+    })
+    return
+  }
+  if (done) {
+    io.to(`chat:${chatId}`).emit("chat:ai", {
+      chatId,
+      done,
+      chunk: null,
+      message: message,
+      sender,
+    })
+    return
+  }
+}

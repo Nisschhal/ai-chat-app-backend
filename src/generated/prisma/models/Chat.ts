@@ -31,6 +31,7 @@ export type ChatMinAggregateOutputType = {
   groupAvatar: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  isAIChat: boolean | null
   createdById: string | null
   latestMessageId: string | null
 }
@@ -42,6 +43,7 @@ export type ChatMaxAggregateOutputType = {
   groupAvatar: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  isAIChat: boolean | null
   createdById: string | null
   latestMessageId: string | null
 }
@@ -53,6 +55,7 @@ export type ChatCountAggregateOutputType = {
   groupAvatar: number
   createdAt: number
   updatedAt: number
+  isAIChat: number
   createdById: number
   latestMessageId: number
   _all: number
@@ -66,6 +69,7 @@ export type ChatMinAggregateInputType = {
   groupAvatar?: true
   createdAt?: true
   updatedAt?: true
+  isAIChat?: true
   createdById?: true
   latestMessageId?: true
 }
@@ -77,6 +81,7 @@ export type ChatMaxAggregateInputType = {
   groupAvatar?: true
   createdAt?: true
   updatedAt?: true
+  isAIChat?: true
   createdById?: true
   latestMessageId?: true
 }
@@ -88,6 +93,7 @@ export type ChatCountAggregateInputType = {
   groupAvatar?: true
   createdAt?: true
   updatedAt?: true
+  isAIChat?: true
   createdById?: true
   latestMessageId?: true
   _all?: true
@@ -172,6 +178,7 @@ export type ChatGroupByOutputType = {
   groupAvatar: string | null
   createdAt: Date
   updatedAt: Date
+  isAIChat: boolean
   createdById: string
   latestMessageId: string | null
   _count: ChatCountAggregateOutputType | null
@@ -204,6 +211,7 @@ export type ChatWhereInput = {
   groupAvatar?: Prisma.StringNullableFilter<"Chat"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chat"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chat"> | Date | string
+  isAIChat?: Prisma.BoolFilter<"Chat"> | boolean
   createdById?: Prisma.StringFilter<"Chat"> | string
   latestMessageId?: Prisma.StringNullableFilter<"Chat"> | string | null
   participants?: Prisma.UserListRelationFilter
@@ -219,6 +227,7 @@ export type ChatOrderByWithRelationInput = {
   groupAvatar?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isAIChat?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   latestMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   participants?: Prisma.UserOrderByRelationAggregateInput
@@ -237,6 +246,7 @@ export type ChatWhereUniqueInput = Prisma.AtLeast<{
   groupAvatar?: Prisma.StringNullableFilter<"Chat"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chat"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chat"> | Date | string
+  isAIChat?: Prisma.BoolFilter<"Chat"> | boolean
   createdById?: Prisma.StringFilter<"Chat"> | string
   latestMessageId?: Prisma.StringNullableFilter<"Chat"> | string | null
   participants?: Prisma.UserListRelationFilter
@@ -252,6 +262,7 @@ export type ChatOrderByWithAggregationInput = {
   groupAvatar?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isAIChat?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   latestMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ChatCountOrderByAggregateInput
@@ -269,6 +280,7 @@ export type ChatScalarWhereWithAggregatesInput = {
   groupAvatar?: Prisma.StringNullableWithAggregatesFilter<"Chat"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Chat"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Chat"> | Date | string
+  isAIChat?: Prisma.BoolWithAggregatesFilter<"Chat"> | boolean
   createdById?: Prisma.StringWithAggregatesFilter<"Chat"> | string
   latestMessageId?: Prisma.StringNullableWithAggregatesFilter<"Chat"> | string | null
 }
@@ -280,6 +292,7 @@ export type ChatCreateInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   participants?: Prisma.UserCreateNestedManyWithoutChatsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedChatsInput
   latestMessage?: Prisma.MessageCreateNestedOneWithoutLastMessageForChatInput
@@ -293,6 +306,7 @@ export type ChatUncheckedCreateInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdById: string
   latestMessageId?: string | null
   participants?: Prisma.UserUncheckedCreateNestedManyWithoutChatsInput
@@ -306,6 +320,7 @@ export type ChatUpdateInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   participants?: Prisma.UserUpdateManyWithoutChatsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedChatsNestedInput
   latestMessage?: Prisma.MessageUpdateOneWithoutLastMessageForChatNestedInput
@@ -319,6 +334,7 @@ export type ChatUncheckedUpdateInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.UserUncheckedUpdateManyWithoutChatsNestedInput
@@ -332,6 +348,7 @@ export type ChatCreateManyInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdById: string
   latestMessageId?: string | null
 }
@@ -343,6 +360,7 @@ export type ChatUpdateManyMutationInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ChatUncheckedUpdateManyInput = {
@@ -352,6 +370,7 @@ export type ChatUncheckedUpdateManyInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -373,6 +392,7 @@ export type ChatCountOrderByAggregateInput = {
   groupAvatar?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isAIChat?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   latestMessageId?: Prisma.SortOrder
 }
@@ -384,6 +404,7 @@ export type ChatMaxOrderByAggregateInput = {
   groupAvatar?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isAIChat?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   latestMessageId?: Prisma.SortOrder
 }
@@ -395,6 +416,7 @@ export type ChatMinOrderByAggregateInput = {
   groupAvatar?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isAIChat?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   latestMessageId?: Prisma.SortOrder
 }
@@ -484,10 +506,6 @@ export type ChatUncheckedUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.ChatScalarWhereInput | Prisma.ChatScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type ChatCreateNestedOneWithoutMessagesInput = {
   create?: Prisma.XOR<Prisma.ChatCreateWithoutMessagesInput, Prisma.ChatUncheckedCreateWithoutMessagesInput>
   connectOrCreate?: Prisma.ChatCreateOrConnectWithoutMessagesInput
@@ -551,6 +569,7 @@ export type ChatCreateWithoutParticipantsInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedChatsInput
   latestMessage?: Prisma.MessageCreateNestedOneWithoutLastMessageForChatInput
   messages?: Prisma.MessageCreateNestedManyWithoutChatInput
@@ -563,6 +582,7 @@ export type ChatUncheckedCreateWithoutParticipantsInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdById: string
   latestMessageId?: string | null
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChatInput
@@ -580,6 +600,7 @@ export type ChatCreateWithoutCreatedByInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   participants?: Prisma.UserCreateNestedManyWithoutChatsInput
   latestMessage?: Prisma.MessageCreateNestedOneWithoutLastMessageForChatInput
   messages?: Prisma.MessageCreateNestedManyWithoutChatInput
@@ -592,6 +613,7 @@ export type ChatUncheckedCreateWithoutCreatedByInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   latestMessageId?: string | null
   participants?: Prisma.UserUncheckedCreateNestedManyWithoutChatsInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChatInput
@@ -633,6 +655,7 @@ export type ChatScalarWhereInput = {
   groupAvatar?: Prisma.StringNullableFilter<"Chat"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chat"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chat"> | Date | string
+  isAIChat?: Prisma.BoolFilter<"Chat"> | boolean
   createdById?: Prisma.StringFilter<"Chat"> | string
   latestMessageId?: Prisma.StringNullableFilter<"Chat"> | string | null
 }
@@ -660,6 +683,7 @@ export type ChatCreateWithoutMessagesInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   participants?: Prisma.UserCreateNestedManyWithoutChatsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedChatsInput
   latestMessage?: Prisma.MessageCreateNestedOneWithoutLastMessageForChatInput
@@ -672,6 +696,7 @@ export type ChatUncheckedCreateWithoutMessagesInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdById: string
   latestMessageId?: string | null
   participants?: Prisma.UserUncheckedCreateNestedManyWithoutChatsInput
@@ -689,6 +714,7 @@ export type ChatCreateWithoutLatestMessageInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   participants?: Prisma.UserCreateNestedManyWithoutChatsInput
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedChatsInput
   messages?: Prisma.MessageCreateNestedManyWithoutChatInput
@@ -701,6 +727,7 @@ export type ChatUncheckedCreateWithoutLatestMessageInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdById: string
   participants?: Prisma.UserUncheckedCreateNestedManyWithoutChatsInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutChatInput
@@ -734,6 +761,7 @@ export type ChatUpdateWithoutMessagesInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   participants?: Prisma.UserUpdateManyWithoutChatsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedChatsNestedInput
   latestMessage?: Prisma.MessageUpdateOneWithoutLastMessageForChatNestedInput
@@ -746,6 +774,7 @@ export type ChatUncheckedUpdateWithoutMessagesInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.UserUncheckedUpdateManyWithoutChatsNestedInput
@@ -774,6 +803,7 @@ export type ChatCreateManyCreatedByInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   latestMessageId?: string | null
 }
 
@@ -784,6 +814,7 @@ export type ChatUpdateWithoutParticipantsInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedChatsNestedInput
   latestMessage?: Prisma.MessageUpdateOneWithoutLastMessageForChatNestedInput
   messages?: Prisma.MessageUpdateManyWithoutChatNestedInput
@@ -796,6 +827,7 @@ export type ChatUncheckedUpdateWithoutParticipantsInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messages?: Prisma.MessageUncheckedUpdateManyWithoutChatNestedInput
@@ -808,6 +840,7 @@ export type ChatUncheckedUpdateManyWithoutParticipantsInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -819,6 +852,7 @@ export type ChatUpdateWithoutCreatedByInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   participants?: Prisma.UserUpdateManyWithoutChatsNestedInput
   latestMessage?: Prisma.MessageUpdateOneWithoutLastMessageForChatNestedInput
   messages?: Prisma.MessageUpdateManyWithoutChatNestedInput
@@ -831,6 +865,7 @@ export type ChatUncheckedUpdateWithoutCreatedByInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participants?: Prisma.UserUncheckedUpdateManyWithoutChatsNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutChatNestedInput
@@ -843,6 +878,7 @@ export type ChatUncheckedUpdateManyWithoutCreatedByInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   latestMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -853,6 +889,7 @@ export type ChatCreateManyLatestMessageInput = {
   groupAvatar?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isAIChat?: boolean
   createdById: string
 }
 
@@ -863,6 +900,7 @@ export type ChatUpdateWithoutLatestMessageInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   participants?: Prisma.UserUpdateManyWithoutChatsNestedInput
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedChatsNestedInput
   messages?: Prisma.MessageUpdateManyWithoutChatNestedInput
@@ -875,6 +913,7 @@ export type ChatUncheckedUpdateWithoutLatestMessageInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   participants?: Prisma.UserUncheckedUpdateManyWithoutChatsNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutChatNestedInput
@@ -887,6 +926,7 @@ export type ChatUncheckedUpdateManyWithoutLatestMessageInput = {
   groupAvatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAIChat?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -937,6 +977,7 @@ export type ChatSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   groupAvatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isAIChat?: boolean
   createdById?: boolean
   latestMessageId?: boolean
   participants?: boolean | Prisma.Chat$participantsArgs<ExtArgs>
@@ -953,6 +994,7 @@ export type ChatSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   groupAvatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isAIChat?: boolean
   createdById?: boolean
   latestMessageId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -966,6 +1008,7 @@ export type ChatSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   groupAvatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isAIChat?: boolean
   createdById?: boolean
   latestMessageId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -979,11 +1022,12 @@ export type ChatSelectScalar = {
   groupAvatar?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isAIChat?: boolean
   createdById?: boolean
   latestMessageId?: boolean
 }
 
-export type ChatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isGroup" | "groupName" | "groupAvatar" | "createdAt" | "updatedAt" | "createdById" | "latestMessageId", ExtArgs["result"]["chat"]>
+export type ChatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "isGroup" | "groupName" | "groupAvatar" | "createdAt" | "updatedAt" | "isAIChat" | "createdById" | "latestMessageId", ExtArgs["result"]["chat"]>
 export type ChatInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   participants?: boolean | Prisma.Chat$participantsArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1015,6 +1059,7 @@ export type $ChatPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     groupAvatar: string | null
     createdAt: Date
     updatedAt: Date
+    isAIChat: boolean
     createdById: string
     latestMessageId: string | null
   }, ExtArgs["result"]["chat"]>
@@ -1450,6 +1495,7 @@ export interface ChatFieldRefs {
   readonly groupAvatar: Prisma.FieldRef<"Chat", 'String'>
   readonly createdAt: Prisma.FieldRef<"Chat", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Chat", 'DateTime'>
+  readonly isAIChat: Prisma.FieldRef<"Chat", 'Boolean'>
   readonly createdById: Prisma.FieldRef<"Chat", 'String'>
   readonly latestMessageId: Prisma.FieldRef<"Chat", 'String'>
 }

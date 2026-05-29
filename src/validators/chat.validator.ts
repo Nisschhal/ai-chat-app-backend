@@ -6,6 +6,7 @@ export const createChatSchema = z.object({
   participants: z.array(z.string().trim().min(1)).optional(),
   groupName: z.string().trim().min(1).optional(),
   groupAvatar: z.string().trim().min(1).optional(),
+  includeAI: z.boolean().optional(),
 })
 
 export const chatIdSchema = z.object({
